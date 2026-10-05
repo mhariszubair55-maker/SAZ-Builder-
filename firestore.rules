@@ -1,0 +1,71 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny Fallback
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function isProjectOwner(projectId) {
+      return isSignedIn() && get(/databases/$(database)/documents/projects/$(projectId)).data.ownerId == request.auth.uid;
+    }
+
+    // Connection testing endpoint
+    match /test/{testDoc} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // User Profiles: Private and isolated
+    match /users/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId;
+      allow list: if false;
+      allow create: if isSignedIn() && request.auth.uid == userId && incoming().uid == request.auth.uid;
+      allow update: if isSignedIn() && request.auth.uid == userId && incoming().uid == existing().uid;
+      allow delete: if false;
+    }
+
+    // User Projects: Strictly restricted to each user's own projects
+    match /projects/{projectId} {
+      allow get: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isSignedIn() && incoming().ownerId == request.auth.uid;
+      allow update: if isSignedIn() && existing().ownerId == request.auth.uid && incoming().ownerId == existing().ownerId;
+      allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+
+      // Project Source Files Subcollection
+      match /files/{fileId} {
+        allow get, list: if isProjectOwner(projectId);
+        allow create: if isProjectOwner(projectId) && incoming().ownerId == request.auth.uid;
+        allow update: if isProjectOwner(projectId) && incoming().ownerId == existing().ownerId;
+        allow delete: if isProjectOwner(projectId);
+      }
+
+      // AI Conversations & Coding Agent Sessions Subcollection
+      match /conversations/{conversationId} {
+        allow get, list: if isProjectOwner(projectId);
+        allow create: if isProjectOwner(projectId) && incoming().ownerId == request.auth.uid;
+        allow update: if isProjectOwner(projectId) && incoming().ownerId == existing().ownerId;
+        allow delete: if isProjectOwner(projectId);
+      }
+    }
+  }
+}

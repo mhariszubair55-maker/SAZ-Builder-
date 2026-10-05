@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-display: 'Syne', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, .font-display {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Professional Code Editor Token Highlighting */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #64748b;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: #94a3b8;
+}
+
+.token.namespace {
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #f87171;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #34d399;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #38bdf8;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #fbbf24;
+  font-weight: 500;
+}
+
+.token.function,
+.token.class-name {
+  color: #60a5fa;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #fb923c;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+

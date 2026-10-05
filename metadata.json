@@ -1,0 +1,6 @@
+{
+  "name": "SAZ Builder",
+  "description": "Mobile-first AI application building platform with live multi-file synthesis, interactive studio preview, project registry, and extensible template architecture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

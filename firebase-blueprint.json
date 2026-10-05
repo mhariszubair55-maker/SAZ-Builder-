@@ -1,0 +1,87 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile and account information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Application project metadata and configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "slug": { "type": "string" },
+        "summary": { "type": "string" },
+        "framework": { "type": "string" },
+        "modules": { "type": "array" },
+        "settings": { "type": "object" },
+        "previewHtml": { "type": "string" },
+        "architectureNotes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "ownerId", "name", "slug"]
+    },
+    "ProjectFile": {
+      "title": "ProjectFile",
+      "description": "Individual source file belonging to a project",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "path": { "type": "string" },
+        "language": { "type": "string" },
+        "content": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "projectId", "ownerId", "path", "content"]
+    },
+    "AIConversation": {
+      "title": "AIConversation",
+      "description": "AI Coding Agent conversation and plan history",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "prompt": { "type": "string" },
+        "summary": { "type": "string" },
+        "plan": { "type": "array" },
+        "steps": { "type": "array" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "projectId", "ownerId", "prompt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Stores user profile and account details"
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Stores project documents owned by each user"
+    },
+    "/projects/{projectId}/files/{fileId}": {
+      "schema": "ProjectFile",
+      "description": "Stores source files for a project"
+    },
+    "/projects/{projectId}/conversations/{conversationId}": {
+      "schema": "AIConversation",
+      "description": "Stores AI agent sessions and conversation history"
+    }
+  }
+}
